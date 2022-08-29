@@ -358,7 +358,7 @@ int main(void)
     std::string s = "[{\"a\":123}]", err;
     picojson::value v;
     picojson::default_parse_context ctx(&v, 1);
-    std::string::const_iterator end = picojson::_parse(ctx, s.begin(), s.end(), &err);
+    picojson::_parse(ctx, s.begin(), s.end(), &err);
     _ok(!err.empty(), "should fail");
     _ok(v.is<picojson::array>(), "should get an array");
     _ok(v.get(0).is<picojson::null>(), "that contains null");
@@ -367,7 +367,7 @@ int main(void)
   {
     std::string s = "[{\"a\":123}]", err;
     picojson::null_parse_context ctx(1);
-    std::string::const_iterator end = picojson::_parse(ctx, s.begin(), s.end(), &err);
+    picojson::_parse(ctx, s.begin(), s.end(), &err);
     _ok(!err.empty(), "should fail");
   }
 

@@ -7,14 +7,17 @@ test: test-core test-core-int64
 	./test-core
 	./test-core-int64
 
-test-core: picojson.h test.cc picotest/picotest.c picotest/picotest.h
-	$(CXX) $(CXXFLAGS) -Wall test.cc picotest/picotest.c -o $@
+picotest.o: picotest/picotest.c picotest/picotest.h
+	$(CC) $(CFLAGS) -Wall -c picotest/picotest.c -o picotest.o
 
-test-core-int64: picojson.h test.cc picotest/picotest.c picotest/picotest.h
-	$(CXX) $(CXXFLAGS) -Wall -DPICOJSON_USE_INT64 test.cc picotest/picotest.c -o $@
+test-core: picojson.h test.cc picotest.o
+	$(CXX) $(CXXFLAGS) -std=c++11 -Wall test.cc picotest.o -o $@
+
+test-core-int64: picojson.h test.cc picotest.o
+	$(CXX) $(CXXFLAGS) -std=c++11 -Wall -DPICOJSON_USE_INT64 test.cc picotest.o -o $@
 
 clean:
-	rm -f test-core test-core-int64
+	rm -f test-core test-core-int64 picotest.o
 
 install:
 	install -d $(DESTDIR)$(includedir)
